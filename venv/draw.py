@@ -105,20 +105,56 @@ class event_handler():
             self.start_event_list += self.event_list[todoing]["start"]
             self.past_event_list += self.event_list[todoing]["end"]
 
-print("The game has started")
-player_name = input("What is the name of your character? ")
-if len(player_name) == 0:
-    print("Smartass, ya?")
-    player_name = random.choice(globals.LIST_STUPID_NAMES)
-    print("I will call you " + player_name + " for that")
-player_character = character(name=player_name)
-print(player_character.description)
-print("For now, you cannot move in some places, only just move to somewhere")
-start_location = territory(name="Old farm")
-start_location.description()
-direction = input("Do you want to go adventure? ")
-if direction in globals.LIST_OF_ACCEPT_CHARACTERS:
-    print("So you drink a cup of wine, sing the song and go in nowhere!")
-else:
-    print("You want to stay in your dirty old farm forever")
+def initialle():
+    print("The game has started")
+    player_name = input("What is the name of your character? ")
+    if len(player_name) == 0:
+        print("Smartass, ya?")
+        player_name = random.choice(globals.LIST_STUPID_NAMES)
+        print("I will call you " + player_name + " for that")
+    player_character = character(name=player_name)
+    print(player_character.description)
+    print("For now, you cannot move in some places, only just move to somewhere")
+    start_location = territory(name="Old farm")
+    start_location.description()
+    direction = input("Do you want to go adventure? ")
+    if direction.upper() in globals.LIST_OF_ACCEPT_CHARACTERS:
+        print("So you drink a cup of wine, sing the song and go in nowhere!")
+    else:
+        print("You want to stay in your dirty old farm forever")
 print("Anyway, we start to emulate life right now!")
+
+class main_process():
+    def __init__(self):
+        self.play_flag = True
+        self.init = False
+
+    def on_exit(self):
+        self.play_flag = False
+
+    def tester(self):
+        print("Yes it's true!")
+
+# I need the only one entry point to format and parse user's commands
+    def entry_point(self, message=None):
+        user_command = input(message + " ")
+        # Several escape sequance to rule over game cyrcle
+        if user_command in globals.LIST_SYSTEM_CALLS:
+            print(globals.LIST_SYSTEM_CALLS[user_command]["description"])
+            method_to_call = getattr(self, globals.LIST_SYSTEM_CALLS[user_command]["action"])
+            method_to_call()
+        elif user_command in globals.LIST_NO_TIME_CONSUMPTION:
+            print(globals.LIST_NO_TIME_CONSUMPTION[user_command])
+        if globals.FLAG_DEBUG:
+            print("Additionsl debug")
+
+    def running(self):
+        while self.play_flag:
+            if self.init:
+                initialle()
+                self.init = False
+            # todo = input("What do you want to do? ")
+            self.entry_point("What now?")
+
+new_game = main_process()
+new_game.running()
