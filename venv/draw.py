@@ -144,7 +144,9 @@ class main_process():
             method_to_call = getattr(self, globals.LIST_SYSTEM_CALLS[user_command]["action"])
             method_to_call()
         elif user_command in globals.LIST_NO_TIME_CONSUMPTION:
-            print(globals.LIST_NO_TIME_CONSUMPTION[user_command])
+            print(globals.LIST_NO_TIME_CONSUMPTION[user_command]["description"])
+            method_to_call = getattr(self, globals.LIST_NO_TIME_CONSUMPTION[user_command]["action"])
+            method_to_call()
         if globals.FLAG_DEBUG:
             print("Additionsl debug")
 
@@ -155,6 +157,10 @@ class main_process():
                 self.init = False
             # todo = input("What do you want to do? ")
             self.entry_point("What now?")
+
+    def listing(self):
+        backpack = ["vodka", "tequilla", "beer", "rom"]
+        tools.tool_list_to_string(backpack)
 
 new_game = main_process()
 new_game.running()

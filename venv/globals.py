@@ -4,7 +4,7 @@
 MAX_PRINT_LIST_NUMBER = 10
 
 # List of characters, that accepted as "Yes"
-LIST_OF_ACCEPT_CHARACTERS = ["Y", "YES", "YEP", "Д", "ДА"]
+LIST_OF_ACCEPT_CHARACTERS = ["Y", "YES", "YEP", "Д", "ДА", "E"]
 
 # To control advices for newbie players
 EXTENDED_ADVICES_BOOL = True
@@ -41,5 +41,8 @@ LIST_SYSTEM_CALLS = {
 # Some buttons, which not ended the turn
 LIST_NO_TIME_CONSUMPTION = {
     "o": "You observe everything",
-    "b": "Your backpack is full of shit",
+    "b": {
+        "action": "listing",
+        "description": "Your backpack is full of shit",
+    }
 }
