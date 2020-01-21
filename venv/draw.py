@@ -3,14 +3,119 @@
 import tools
 import globals
 import random
+import string
 
 
 
-#new_game = event_handler()
-#while True:
-#    new_game.before_start()
-#    new_game.turn_process()
-#    new_game.after_turn()
+yet_another_message = "New turn has start, command me your majesty! "
+# Define the main process here
+class main_process():
+    def __init__(self):
+        self.flag_is_playing = True
+
+    # I need the only one entry point to check, format and parse user's commands
+    def entry_point(self, message=None, asked_type=None, int_min=None, int_max=None, strict_yes=False, str_max=None):
+        if message is None:
+            message = "What now? "
+        if asked_type is None:
+            asked_type = str
+        if asked_type is int:
+            # I need to control max and min later on, but need some system default limitations
+            if int_min is None:
+                int_min = globals.RANGE_INT_SIZE["min"]
+            if int_max is None:
+                int_max = globals.RANGE_INT_SIZE["max"]
+            ask_for_type = " Input number, from " + str(int_min) + " to " + \
+                           str(int_max) + ", please: "
+            #TODO This part try to repeat input until desired typr has inputted
+            # Need to improve this part to make it on the same line of screen
+            # when the UI will be ready, to do not let user forget what he should input
+            while True:
+                user_command = input(message + ask_for_type)
+                if len(user_command) == 0:
+                    message = "Do not input empty value!"
+                # reverse check if it a digit
+                elif not(user_command[0] == '-' and user_command[1:].isdigit() or user_command.isdigit()):
+                    message = "Wrong input type!"
+                elif int(user_command) < int_min:
+                    message = "Please, input more, then " + str(int_min) + "!"
+                elif int(user_command) > int_max:
+                    message = "Please, not more, then " + str(int_max) + "!"
+                else:
+                    break
+        elif asked_type is bool:
+            ask_for_type = " Do you accept this? "
+            while True:
+                user_command = input(message + ask_for_type)
+                if user_command.upper() in globals.LIST_OF_ACCEPT_CHARACTERS:
+                    print("You accept this")
+                    user_command = True
+                    break
+                elif user_command.upper() in globals.LIST_OF_DECLINE_CHARACTERS:
+                    print("You decline it")
+                    user_command = False
+                    break
+                elif strict_yes:
+                    message = "Please, exact 'Yes' or 'No'"
+                else:
+                    print("We translate it as 'No'")
+                    user_command = False
+                    break
+
+        else:
+            ask_for_type = " "
+            if str_max is None:
+                str_max = globals.MAX_STRING_SIZE
+            user_command = input(message + ask_for_type)
+            if len(user_command) > globals.MAX_STRING_SIZE:
+                print("It is more, then I want, I will cut it")
+                user_command = user_command[:globals.MAX_STRING_SIZE]
+        return user_command
+
+
+
+    def running(self):
+        char_name = self.entry_point("What is your name?")
+        char_age = self.entry_point("What is your age?", int)
+        char_live = self.entry_point("Are you alive?", bool, strict_yes=False)
+        print("you are " + char_name)
+        print("your age is " + str(char_age))
+        if char_live:
+            print("you live")
+        else:
+            print("you are dead")
+        while self.flag_is_playing:
+            if random.randint(1,10) < 5:
+                self.entry_point(yet_another_message)
+            else:
+                self.entry_point()
+
+    def on_exit(self):
+        self.flag_is_playing = False
+
+new_game = main_process()
+new_game.running()
+#eval_string = lambda x: x.isalpha() and x or x.isdigit() and int(x) or x.isalnum() and x or \
+#                     len(set(string.punctuation).intersection(x)) == 1 and x.count('.') == 1 and float(x) or x
+a = "false"
+if a:
+ print("da")
+
+if len(a) > 0:
+    if a.upper() in globals.LIST_OF_ACCEPT_CHARACTERS:
+        print("it is yes")
+    elif a.upper() in globals.LIST_OF_DECLINE_CHARACTERS:
+        print("it is no")
+    elif a[0] == '-' and a[1:].isdigit():
+        print("it is negative")
+        print(int(a))
+    elif a.isdigit():
+        print("it is positive")
+        print(int(a))
+    else:
+        print("not digit")
+else:
+    print("empty string")
 
 
 # World generation
@@ -122,45 +227,7 @@ def initialle():
         print("So you drink a cup of wine, sing the song and go in nowhere!")
     else:
         print("You want to stay in your dirty old farm forever")
-print("Anyway, we start to emulate life right now!")
+    print("Anyway, we start to emulate life right now!")
 
-class main_process():
-    def __init__(self):
-        self.play_flag = True
-        self.init = False
 
-    def on_exit(self):
-        self.play_flag = False
 
-    def tester(self):
-        print("Yes it's true!")
-
-# I need the only one entry point to format and parse user's commands
-    def entry_point(self, message=None):
-        user_command = input(message + " ")
-        # Several escape sequance to rule over game cyrcle
-        if user_command in globals.LIST_SYSTEM_CALLS:
-            print(globals.LIST_SYSTEM_CALLS[user_command]["description"])
-            method_to_call = getattr(self, globals.LIST_SYSTEM_CALLS[user_command]["action"])
-            method_to_call()
-        elif user_command in globals.LIST_NO_TIME_CONSUMPTION:
-            print(globals.LIST_NO_TIME_CONSUMPTION[user_command]["description"])
-            method_to_call = getattr(self, globals.LIST_NO_TIME_CONSUMPTION[user_command]["action"])
-            method_to_call()
-        if globals.FLAG_DEBUG:
-            print("Additionsl debug")
-
-    def running(self):
-        while self.play_flag:
-            if self.init:
-                initialle()
-                self.init = False
-            # todo = input("What do you want to do? ")
-            self.entry_point("What now?")
-
-    def listing(self):
-        backpack = ["vodka", "tequilla", "beer", "rom"]
-        tools.tool_list_to_string(backpack)
-
-new_game = main_process()
-new_game.running()

@@ -1,4 +1,5 @@
 import globals
+import string
 
 # I need procedural tool to make a good string from list
 def tool_list_to_string(some_list, appeal=None):
@@ -50,3 +51,10 @@ def tool_list_to_string(some_list, appeal=None):
                     print('For "Yes", please input one of this: ' + globals.LIST_OF_ACCEPT_CHARACTERS)
     else:
         raise TypeError("This function is for list or dict only")
+
+# https://stackoverflow.com/questions/379906/how-do-i-parse-a-string-to-a-float-or-int/7588720#7588720? \
+# newreg=7fd570f4fdbb465991904083fcfcf574
+# Code from here, some guy `krzym` share it
+eval_string = lambda x: x.isalpha() and x or x.isdigit() and int(x) or x.isalnum() and x or \
+                     len(set(string.punctuation).intersection(x)) == 1 and x.count('.') == 1 and float(x) or x
+

@@ -6,6 +6,9 @@ MAX_PRINT_LIST_NUMBER = 10
 # List of characters, that accepted as "Yes"
 LIST_OF_ACCEPT_CHARACTERS = ["Y", "YES", "YEP", "Д", "ДА", "E"]
 
+# List of characters, that accepted as "No" for `Strictyes` feature
+LIST_OF_DECLINE_CHARACTERS = ["N", "NO", "NOPE", "Н", "НЕ", "НЕТ"]
+
 # To control advices for newbie players
 EXTENDED_ADVICES_BOOL = True
 
@@ -40,9 +43,18 @@ LIST_SYSTEM_CALLS = {
 
 # Some buttons, which not ended the turn
 LIST_NO_TIME_CONSUMPTION = {
-    "o": "You observe everything",
+    "o": {
+        "action": None,
+        "description": "You observe everything",
+    },
     "b": {
         "action": "listing",
         "description": "Your backpack is full of shit",
     }
 }
+
+# Max for string input
+MAX_STRING_SIZE = 10
+
+# Range for int
+RANGE_INT_SIZE = {"min": 0, "max": 100}
