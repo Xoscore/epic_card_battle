@@ -11,16 +11,22 @@ class main_process():
     def __init__(self):
         self.flag_is_playing = True
 
+    def start_game(self):
+        #char_name = tools.entry_point("What is your name?")
+        #char_age = tools.entry_point("What is your age?", int, int_min=12, int_max=90)
+        #char_live = tools.entry_point("Are you alive?", bool, strict_yes=True)
+        char_sex = tools.entry_point("What is your sex?", ["male", "female"])
+        #print("you are " + char_name)
+        #print("your age is " + str(char_age))
+        #if char_live:
+        #    print("you live")
+        #else:
+        #    print("you are dead")
+        print("you are " + char_sex)
+
+
     def running(self):
-        char_name = tools.entry_point("What is your name?")
-        char_age = tools.entry_point("What is your age?", int)
-        char_live = tools.entry_point("Are you alive?", bool, strict_yes=True)
-        print("you are " + char_name)
-        print("your age is " + str(char_age))
-        if char_live:
-            print("you live")
-        else:
-            print("you are dead")
+        self.start_game()
         while self.flag_is_playing:
             if random.randint(1,10) < 5:
                 tools.entry_point(yet_another_message)

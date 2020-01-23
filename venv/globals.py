@@ -19,6 +19,7 @@ LIST_OF_DECLINE_CHARACTERS = ["N", "NO", "NOPE", "Н", "НЕ", "НЕТ"]
 LIST_POINT_TO = {
     "personal": "You have ",
     "uncertain": "There are ",
+    "empty": "",
 }
 
 # I need to keep some stupid names just for fun
