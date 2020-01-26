@@ -29,5 +29,10 @@ LIST_STUPID_NAMES = [
     "kadyrov-pidor",
 ]
 
+LIST_NAMES_OF_UNKNOWN_SPECIES = [
+    "Undefine Error #1",
+    "You_forgot_the_name_param"
+]
+
 # Need to keep Debug switcher somewhere
 FLAG_DEBUG = False

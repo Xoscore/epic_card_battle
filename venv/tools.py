@@ -4,6 +4,8 @@ import globals
 # Usually it's just procedural ones, with clean return, not related to any objects
 
 # I need procedural tool to make a good string from list
+# Usage:
+# Just put any dict or list inside and get string outside
 def tool_list_to_string(some_list, appeal=None, shorten_list=True):
     if appeal not in globals.LIST_POINT_TO:
         appeal = globals.LIST_POINT_TO["uncertain"]
@@ -40,6 +42,11 @@ def tool_list_to_string(some_list, appeal=None, shorten_list=True):
     return output_string
 
 # My own function to parse input
+# Examples:
+# char_name = tools.entry_point("What is your name?", str_max=10) # - ask for string, 10 characters long, cut for longer
+# char_age = tools.entry_point("What is your age?", int, int_min=12, int_max=90) # - ask for int from 12 to 90
+# char_live = tools.entry_point("Are you alive?", bool, strict_yes=True) # bool entry from bool list in global
+# char_sex = tools.entry_point("What is your sex?", ["male", "female"]) # string choice from several options
 def entry_point(message=None, asked_type=None, int_min=None, int_max=None, strict_yes=False, str_max=None):
     if message is None:
         message = "What now? "
