@@ -5,6 +5,7 @@ import globals
 import random
 import string
 
+MAX_SLOG_SOGLAS = 2
 # taken from here:
 # https://pynative.com/python-generate-random-string/
 # TODO work on name collisions and make them readable
@@ -13,14 +14,162 @@ def randomString(stringLength=10):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
 
+class random_language_rus():
+    def __init__(self):
+        self.word = ""
+        self.glas_sounds = [
+            "а", "е", "ё", "и", "о", "у", "ы", "э", "ю", "я",
+        ]
+        self.soglas_sounds = [
+            "б", "в", "г", "д", "ж", "з", "й", "к", "л", "м", "н", "п", "р", "с", "т", "ф", "х", "ц", "ч", "ш", "щ",
+        ]
+        self.without_sound = [
+            "ь", "ъ",
+        ]
+
+    def open_slog(self, soglas_count=None):
+        if soglas_count is None:
+            soglas_count = random.randint(0, MAX_SLOG_SOGLAS)
+        for i in range (0,soglas_count):
+            self.word += random.choice(self.soglas_sounds)
+        self.word += random.choice(self.glas_sounds)
+
+    def closed_slog(self, soglas_count_before=None, soglas_count_after=None):
+        if soglas_count_before is None:
+            soglas_count_before = random.randint(0, MAX_SLOG_SOGLAS)
+        if soglas_count_after is None:
+            soglas_count_after = 1
+        for i in range(0,soglas_count_before):
+            self.word += random.choice(self.soglas_sounds)
+        self.word += random.choice(self.glas_sounds)
+        for i in range(0, soglas_count_after):
+            self.word += random.choice(self.soglas_sounds)
+
+    def gimmi(self):
+        print(self.word.capitalize())
+
+name_test = random_language_rus()
+name_test.open_slog()
+name_test.closed_slog()
+name_test.open_slog()
+name_test.gimmi()
+
+
+def randomName_rus(stringLenght=10):
+    yo_slogs = [
+        "бё", "вё", "гё", "дё", "зё", "кё", "лё", "мё", "нё", "пё", "рё", "сё", "тё", "фё", "хё", "цё", "ё",
+        "ёб", "ёв", "ёг", "ёд", "ёз", "ёк", "ёл", "ём", "ён", "ёп", "ёр", "ёс", "ёт", "ёф", "ёх", "ёц", "ёй",
+        "ёж", "ёш", "ёч", "ёщ",
+    ]
+    sweet_slogs = [
+        "бь", "вь", "гь", "дь", "жь", "зь", "кь", "ль", "мь", "нь", "пь", "рь", "сь", "ть", "фь", "хь", "шь", "щь",
+    ]
+    special_slogs = [
+        "ъ", "й", "ы",
+    ]
+    j_slogs = [
+        "йа", "йо", "йу", "йэ",
+    ]
+    snaky_slogs = [
+
+        "жа", "же", "жи", "жо", "жу",
+        "ца", "це", "ци", "цо", "цу",
+        "ча", "че", "чи", "чо", "чу",
+        "ша", "ше", "ши", "шо", "шу",
+        "ща", "ще", "щи", "що", "щу",
+        "аж", "еж", "иж", "ож", "уж",
+        "ац", "ец", "иц", "оц", "уц",
+        "ач", "еч", "ич", "оч", "уч",
+        "аш", "еш", "иш", "ош", "уш",
+        "ащ", "ещ", "ищ", "ощ", "ущ",
+    ]
+    snaky_not_second_slogs = [
+        "ыж", "эж", "юж", "яж",
+        "ыц", "эц", "юц", "яц",
+        "ыч", "эч", "юч", "яч",
+        "ыш", "эш", "юш", "яш",
+        "ыщ", "эщ", "ющ", "ящ",
+    ]
+    slogs = [
+        "ба", "бе", "би", "бо", "бу", "бы", "бэ", "бю", "бя",
+        "ва", "ве", "ви", "во", "ву", "вы", "вэ", "вю", "вя",
+        "га", "ге", "ги", "го", "гу", "гы", "гэ", "гю", "гя",
+        "да", "де", "ди", "до", "ду", "ды", "дэ", "дю", "дя",
+        "за", "зе", "зи", "зо", "зу", "зы", "зэ", "зю", "зя",
+        "ка", "ке", "ки", "ко", "ку", "кы", "кэ", "кю", "кя",
+        "ла", "ле", "ли", "ло", "лу", "лы", "лэ", "лю", "ля",
+        "ма", "ме", "ми", "мо", "му", "мы", "мэ", "мю", "мя",
+        "на", "не", "ни", "но", "ну", "ны", "нэ", "ню", "ня",
+        "па", "пе", "пи", "по", "пу", "пы", "пэ", "пю", "пя",
+        "ра", "ре", "ри", "ро", "ру", "ры", "рэ", "рю", "ря",
+        "са", "се", "си", "со", "су", "сы", "сэ", "сю", "ся",
+        "та", "те", "ти", "то", "ту", "ты", "тэ", "тю", "тя",
+        "фа", "фе", "фи", "фо", "фу", "фы", "фэ", "фю", "фя",
+        "ха", "хе", "хи", "хо", "ху", "хы", "хэ", "хю", "хя",
+
+        "аб", "еб", "иб", "об", "уб", "ыб", "эб", "юб", "яб",
+        "ав", "ев", "ив", "ов", "ув", "ыв", "эв", "юв", "яв",
+        "аг", "ег", "иг", "ог", "уг", "ыг", "эг", "юг", "яг",
+        "ад", "ед", "ид", "од", "уд", "ыд", "эд", "юд", "яд",
+        "аз", "ез", "из", "оз", "уз", "ыз", "эз", "юз", "яз",
+        "ай", "ей", "ий", "ой", "уй", "ый", "эй", "юй", "яй",
+        "ак", "ек", "ик", "ок", "ук", "ык", "эк", "юк", "як",
+        "ал", "ел", "ил", "ол", "ул", "ыл", "эл", "юл", "ял",
+        "ам", "ем", "им", "ом", "ум", "ым", "эм", "юм", "ям",
+        "ан", "ен", "ин", "он", "ун", "ын", "эн", "юн", "ян",
+        "ап", "еп", "ип", "оп", "уп", "ып", "эп", "юп", "яп",
+        "ар", "ер", "ир", "ор", "ур", "ыр", "эр", "юр", "яр",
+        "ас", "ес", "ис", "ос", "ус", "ыс", "эс", "юс", "яс",
+        "ат", "ет", "ит", "от", "ут", "ыт", "эт", "ют", "ят",
+        "аф", "еф", "иф", "оф", "уф", "ыф", "эф", "юф", "яф",
+        "ах", "ех", "их", "ох", "ух", "ых", "эх", "юх", "ях",
+    ]
+    solo_slogs = [
+        "а", "е", "ё", "и", "о", "у", "ы", "э", "ю", "я",
+    ]
+    #print(slogs[38:])
+    name = ''.join(random.choice(slogs) for i in range(stringLenght))
+    return name
+
+# really bad, I will try to make it in russian first
+def randomName(stringLenght=10):
+    slogs = [
+        "qe", "qy", "qu", "qi", "qo", "qa",
+        "we", "wy", "wu", "wi", "wo", "wa",
+        "re", "ry", "ru", "ri", "ro", "ra",
+        "te", "ty", "tu", "ti", "to", "ta",
+        "pe", "py", "pu", "pi", "po", "pa",
+        "se", "sy", "su", "si", "so", "sa",
+        "de", "dy", "du", "di", "do", "da",
+        "fe", "fy", "fu", "fi", "fo", "fa",
+        "ge", "gy", "gu", "gi", "go", "ga",
+        "he", "hy", "hu", "hi", "ho", "ha",
+        "je", "jy", "ju", "ji", "jo", "ja",
+        "ke", "ky", "ku", "ki", "ko", "ka",
+        "le", "ly", "lu", "li", "lo", "la",
+        "ze", "zy", "zu", "zi", "zo", "za",
+        "xe", "xy", "xu", "xi", "xo", "xa",
+        "ce", "cy", "cu", "ci", "co", "ca",
+        "ve", "vy", "vu", "vi", "vo", "va",
+        "be", "by", "bu", "bi", "bo", "ba",
+        "ne", "ny", "nu", "ni", "no", "na",
+        "me", "my", "mu", "mi", "mo", "ma",
+    ]
+    name = ''.join(random.choice(slogs) for i in range(stringLenght))
+    return name
+#for i in range(0,10,1):
+#print(randomName_rus(random.randint(1,4)).capitalize())
+
+
 yet_another_message = "New turn has start, command me your majesty! "
 list_of_pc_objects = []
+list_of_locations = []
 # Define the main process here
 class character():
     def __init__(self, id, name=None):
         self.id = id
         if name is None:
-            name = randomString(10)
+            name = randomName_rus(10)
         self.name = name.capitalize()
 
     def describe(self):
@@ -29,6 +178,12 @@ class character():
 class location():
     def __init__(self, id, name=None):
         self.id = id
+        if name is None:
+            name = randomName_rus(10)
+        self.name = name.capitalize()
+
+    def describe(self):
+        print("This is the place, called " + self.name)
 
 class main_process():
     def __init__(self):
@@ -41,24 +196,37 @@ class main_process():
             print("Smartass, ya?")
             char_name = random.choice(globals.LIST_STUPID_NAMES)
             print("I will call you " + char_name + " for that")
-        player = character("main_PC", name=char_name)
+        main_PC = character("main_PC", name=char_name)
         list_of_pc_objects.append(player)
-        player.describe()
-        tools.entry_point("What the name of your hometown? ", )
+        main_PC.describe()
+        start_town_name = tools.entry_point("What the name of your hometown? ", str_max=10)
+        if start_town_name == "":
+            print("I do not like you already")
+            start_town_name = random.choice(globals.LIST_STUPID_TOWN_NAMES)
+            print("I'm sure, that you from this place " + start_town_name)
+        start_town = location("start_town", name=start_town_name)
+        list_of_locations.append(start_town)
+        start_town.describe()
+
+    def generate_new_name(self):
+        print(randomName_rus(random.randint(1,4)).capitalize())
 
     def running(self):
-        self.start_game()
+        #self.start_game()
         while self.flag_is_playing:
-            if random.randint(1,10) < 5:
-                tools.entry_point(yet_another_message)
+            command = tools.entry_point(yet_another_message)
+            if command == "name":
+                self.generate_new_name()
+            elif command == "exit":
+                self.flag_is_playing = False
             else:
-                tools.entry_point()
+                print("nothing happens")
 
     def on_exit(self):
         self.flag_is_playing = False
 
-new_game = main_process()
-new_game.running()
+#new_game = main_process()
+#new_game.running()
 
 
 # World generation
@@ -122,15 +290,9 @@ class event_handler():
             self.past_event_list += self.event_list[todoing]["end"]
 
 def initialle():
-    print("For now, you cannot move in some places, only just move to somewhere")
-    start_location = territory(name="Old farm")
-    start_location.description()
     direction = input("Do you want to go adventure? ")
     if direction.upper() in globals.LIST_OF_ACCEPT_CHARACTERS:
         print("So you drink a cup of wine, sing the song and go in nowhere!")
     else:
         print("You want to stay in your dirty old farm forever")
     print("Anyway, we start to emulate life right now!")
-
-
-

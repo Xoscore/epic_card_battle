@@ -29,9 +29,9 @@ LIST_STUPID_NAMES = [
     "kadyrov-pidor",
 ]
 
-LIST_NAMES_OF_UNKNOWN_SPECIES = [
-    "Undefine Error #1",
-    "You_forgot_the_name_param"
+LIST_STUPID_TOWN_NAMES = [
+    "Undefine",
+    "You_forgot"
 ]
 
 # Need to keep Debug switcher somewhere
