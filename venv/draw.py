@@ -5,7 +5,14 @@ import globals
 import random
 import string
 
-MAX_SLOG_SOGLAS = 2
+
+#minimum = 0.005
+#percent = 5
+#gte_amount = minimum * 100 / percent
+#print(gte_amount)
+
+
+MAX_SLOG_CONSONANT_IN_ROW = 1
 # taken from here:
 # https://pynative.com/python-generate-random-string/
 # TODO work on name collisions and make them readable
@@ -17,41 +24,104 @@ def randomString(stringLength=10):
 class random_language_rus():
     def __init__(self):
         self.word = ""
-        self.glas_sounds = [
-            "а", "е", "ё", "и", "о", "у", "ы", "э", "ю", "я",
+        self.has_yo = False
+        self.no_hissing = False
+        self.vowel_sounds = [
+            "а", "и", "о", "у", "э",
         ]
-        self.soglas_sounds = [
-            "б", "в", "г", "д", "ж", "з", "й", "к", "л", "м", "н", "п", "р", "с", "т", "ф", "х", "ц", "ч", "ш", "щ",
+        self.yo_no_his_vowel_sounds = [
+            "ю", "я",
         ]
-        self.without_sound = [
-            "ь", "ъ",
+        self.yo_vowel_sounds = [
+            "е",
+        ]
+        self.strange_letter = [
+            "ы",
+        ]
+        self.yo = [
+            "ё"
+        ]
+        self.consonant_sounds = [
+            "б", "в", "г", "д", "з", "й", "к", "л", "м", "н", "п", "р", "с", "т", "ф", "х", "ц",
+        ]
+        self.mark_sweet = [
+            "ь",
+        ]
+        self.mark_hard = [
+            "ъ",
+        ]
+        self.hissing_consonant_sounds = [
+            "ж", "ч", "ш", "щ",
         ]
 
-    def open_slog(self, soglas_count=None):
-        if soglas_count is None:
-            soglas_count = random.randint(0, MAX_SLOG_SOGLAS)
-        for i in range (0,soglas_count):
-            self.word += random.choice(self.soglas_sounds)
-        self.word += random.choice(self.glas_sounds)
+    def make_syllable(self, consonant_count_before=0, consonant_count_after=0):
+        consonant_before = ""
+        consonant_after = ""
+        vowel_list = self.vowel_sounds + self.yo_vowel_sounds
+        if not self.no_hissing:
+            vowel_list += self.yo_no_his_vowel_sounds + self.strange_letter
+        if not self.has_yo:
+            vowel_list += self.yo
+        #vowel = random.choice(vowel_list)
+        vowel = random.choice(self.strange_letter)
+        if vowel == 'ё':
+            self.has_yo = True
+        if vowel in self.yo_no_his_vowel_sounds or vowel in self.strange_letter:
+            self.no_hissing = True
+        for i in range(0, consonant_count_before):
+            if i == consonant_count_before and self.no_hissing:
+                consonant_before += random.choice(self.consonant_sounds)
+                self.no_hissing = False
+            else:
+                consonant_before += random.choice(self.consonant_sounds + self.hissing_consonant_sounds)
+        for i in range(0, consonant_count_after):
+            consonant_after += random.choice(self.consonant_sounds + self.hissing_consonant_sounds)
+            if i == consonant_count_after and consonant_after in self.hissing_consonant_sounds:
+                self.no_hissing = True
+        print(consonant_before + vowel + consonant_after)
+        self.word += consonant_before + vowel + consonant_after
 
-    def closed_slog(self, soglas_count_before=None, soglas_count_after=None):
-        if soglas_count_before is None:
-            soglas_count_before = random.randint(0, MAX_SLOG_SOGLAS)
-        if soglas_count_after is None:
-            soglas_count_after = 1
-        for i in range(0,soglas_count_before):
-            self.word += random.choice(self.soglas_sounds)
-        self.word += random.choice(self.glas_sounds)
-        for i in range(0, soglas_count_after):
-            self.word += random.choice(self.soglas_sounds)
+    def open_slog(self, consonant_count=None):
+        if consonant_count is None:
+            consonant_count = random.randint(0, MAX_SLOG_CONSONANT_IN_ROW)
+        for i in range (0,consonant_count):
+            consonant = random.choice(self.consonant_sounds + self.hissing_consonant_sounds)
+            self.word += consonant
+        if not self.has_yo:
+            vowel = random.choice(self.vowel_sounds + self.yo)
+            if vowel == 'ё':
+                self.has_yo = True
+        else:
+            vowel = random.choice(self.vowel_sounds)
+        self.word += vowel
+
+
+    def closed_slog(self, consonant_count_before=None, consonant_count_after=None):
+        if consonant_count_before is None:
+            consonant_count_before = random.randint(0, MAX_SLOG_CONSONANT_IN_ROW)
+        if consonant_count_after is None:
+            consonant_count_after = 1
+        for i in range(0,consonant_count_before):
+            consonant = random.choice(self.consonant_sounds + self.hissing_consonant_sounds)
+            self.word += consonant
+        if not self.has_yo:
+            vowel = random.choice(self.vowel_sounds + self.yo)
+            if vowel == 'ё':
+                self.has_yo = True
+        else:
+            vowel = random.choice(self.vowel_sounds)
+        self.word += vowel
+        for i in range(0, consonant_count_after):
+            consonant = random.choice(self.consonant_sounds + self.hissing_consonant_sounds)
+            self.word += consonant
 
     def gimmi(self):
         print(self.word.capitalize())
 
 name_test = random_language_rus()
-name_test.open_slog()
-name_test.closed_slog()
-name_test.open_slog()
+name_test.make_syllable(random.randint(0, MAX_SLOG_CONSONANT_IN_ROW), random.randint(0, MAX_SLOG_CONSONANT_IN_ROW))
+name_test.make_syllable(random.randint(0, MAX_SLOG_CONSONANT_IN_ROW), random.randint(0, MAX_SLOG_CONSONANT_IN_ROW))
+name_test.make_syllable(random.randint(0, MAX_SLOG_CONSONANT_IN_ROW), random.randint(0, MAX_SLOG_CONSONANT_IN_ROW))
 name_test.gimmi()
 
 
