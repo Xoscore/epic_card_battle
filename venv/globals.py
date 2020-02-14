@@ -25,17 +25,5 @@ LIST_POINT_TO = {
     "empty": "",
 }
 
-# I need to keep some stupid names just for fun
-LIST_STUPID_NAMES = [
-    "Mr. Dick",
-    "putin-sasay",
-    "kadyrov-pidor",
-]
-
-LIST_STUPID_TOWN_NAMES = [
-    "Undefine",
-    "You_forgot"
-]
-
 # Need to keep Debug switcher somewhere
 FLAG_DEBUG = False

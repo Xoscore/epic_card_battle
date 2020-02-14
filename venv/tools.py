@@ -230,7 +230,7 @@ class random_language_rus:
                 consonant_before += random.choice(self.consonant_sounds + self.hissing_consonant_sounds)
 
     def gimmi(self):
-        print(self.word.capitalize())
+        return self.word
 
 def generate_new_name():
     name_test = random_language_rus()
@@ -242,7 +242,8 @@ def generate_new_name():
         third_letter = 2
     name_test.make_syllable(first_letter, second_letter)
     name_test.make_syllable(third_letter, 1)
-    name_test.gimmi()
+    new_name = name_test.gimmi()
+    return new_name
 
 #name_test = random_language_rus()
 #name_test.make_syllable(random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW), random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW))

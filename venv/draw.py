@@ -6,32 +6,6 @@ import random
 import string
 
 
-#minimum = 0.005
-#percent = 5
-#gte_amount = minimum * 100 / percent
-#print(gte_amount)
-
-
-# taken from here:
-# https://pynative.com/python-generate-random-string/
-# TODO work on name collisions and make them readable
-def randomString(stringLength=10):
-    """Generate a random string of fixed length """
-    letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(stringLength))
-
-tools.generate_new_name()
-
-class test_print:
-    def __init__(self):
-        self.a = 42
-
-    def print_yerself(self):
-        print(str(self.__dict__))
-
-b = test_print()
-b.print_yerself()
-
 yet_another_message = "New turn has start, command me your majesty! "
 list_of_pc_objects = []
 list_of_locations = []
@@ -40,7 +14,7 @@ class character:
     def __init__(self, id, name=None):
         self.id = id
         if name is None:
-            name = randomName_rus(10)
+            name = tools.generate_new_name()
         self.name = name.capitalize()
 
     def describe(self):
@@ -50,7 +24,7 @@ class location:
     def __init__(self, id, name=None):
         self.id = id
         if name is None:
-            name = randomName_rus(10)
+            name = tools.generate_new_name()
         self.name = name.capitalize()
 
     def describe(self):
@@ -65,29 +39,26 @@ class main_process():
         char_name = tools.entry_point("What is your name?")
         if char_name == "":
             print("Smartass, ya?")
-            char_name = random.choice(globals.LIST_STUPID_NAMES)
-            print("I will call you " + char_name + " for that")
+            char_name = tools.generate_new_name()
+            print("I will call you " + char_name.capitalize() + " for that")
         main_PC = character("main_PC", name=char_name)
-        list_of_pc_objects.append(player)
+        list_of_pc_objects.append(main_PC)
         main_PC.describe()
         start_town_name = tools.entry_point("What the name of your hometown? ", str_max=10)
         if start_town_name == "":
             print("I do not like you already")
-            start_town_name = random.choice(globals.LIST_STUPID_TOWN_NAMES)
-            print("I'm sure, that you from this place " + start_town_name)
+            start_town_name = tools.generate_new_name()
+            print("I'm sure, that you from this place " + start_town_name.capitalize())
         start_town = location("start_town", name=start_town_name)
         list_of_locations.append(start_town)
         start_town.describe()
 
-    def generate_new_name(self):
-        print(randomName_rus(random.randint(1,4)).capitalize())
-
     def running(self):
-        #self.start_game()
+        self.start_game()
         while self.flag_is_playing:
             command = tools.entry_point(yet_another_message)
             if command == "name":
-                self.generate_new_name()
+                tools.generate_new_name()
             elif command == "exit":
                 self.flag_is_playing = False
             else:
@@ -96,8 +67,8 @@ class main_process():
     def on_exit(self):
         self.flag_is_playing = False
 
-#new_game = main_process()
-#new_game.running()
+new_game = main_process()
+new_game.running()
 
 
 # World generation
