@@ -11,7 +11,7 @@ import string
 #gte_amount = minimum * 100 / percent
 #print(gte_amount)
 
-MAX_SLOG_CONSONANT_IN_ROW = 2
+
 # taken from here:
 # https://pynative.com/python-generate-random-string/
 # TODO work on name collisions and make them readable
@@ -20,98 +20,23 @@ def randomString(stringLength=10):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
 
-class random_language_rus():
+tools.generate_new_name()
+
+class test_print:
     def __init__(self):
-        self.word = ""
-        self.has_yo = False
-        self.no_hissing = False
-        self.vowel_sounds = [
-            "а", "и", "о", "у", "э",
-        ]
-        self.yo_no_his_vowel_sounds = [
-            "ю", "я",
-        ]
-        self.yo_vowel_sounds = [
-            "е",
-        ]
-        self.strange_letter = [
-            "ы",
-        ]
-        self.yo = [
-            "ё"
-        ]
-        self.consonant_sounds = [
-            "б", "в", "г", "д", "з", "й", "к", "л", "м", "н", "п", "р", "с", "т", "ф", "х", "ц",
-        ]
-        self.mark_sweet = [
-            "ь",
-        ]
-        self.mark_hard = [
-            "ъ",
-        ]
-        self.hissing_consonant_sounds = [
-            "ж", "ч", "ш", "щ",
-        ]
+        self.a = 42
 
-    # open and close syllable defined by count of consonant after vowel, so no need to separate them
-    def make_syllable(self, consonant_count_before=0, consonant_count_after=0, with_strange=True):
-        consonant_before = ""
-        consonant_after = ""
-        # because in russian - one vowel equal one syllable, we take vowel first and control the count of consonants
-        # I collect vowel list here for comfort, because vowel can be in any place
-        vowel_list = self.vowel_sounds + self.yo_vowel_sounds
-        # check, if hissing letter was in previous syllable - we cannot use 'ю', 'я' or 'ы' after hissing
-        if not self.no_hissing:
-            vowel_list += self.yo_no_his_vowel_sounds
-        # we can use only one 'ё' in word, so do not pick it if it is in previous syllable
-        if not self.has_yo:
-            vowel_list += self.yo
-        # in additional, 'ы' is not very often letter, so need to switch it
-        if with_strange:
-            vowel_list += self.strange_letter
-        # get the vowel
-        vowel = random.choice(vowel_list)
-        # word cannot start word from 'ы'
-        if vowel in self.strange_letter:
-            consonant_count_before += 1
-        # check if it's 'ё'
-        if vowel in self.yo:
-            self.has_yo = True
-        # check if it's no hissing letter for after consonant or next syllable
-        if vowel in self.yo_no_his_vowel_sounds or vowel in self.strange_letter:
-            self.no_hissing = True
+    def print_yerself(self):
+        print(str(self.__dict__))
 
-        for i in range(0, consonant_count_before):
-            # but for consonant - it depends on the place
-            if i + 1 == consonant_count_before and self.no_hissing:
-                consonant_before += random.choice(self.consonant_sounds)
-                self.no_hissing = False
-            else:
-                consonant_before += random.choice(self.consonant_sounds + self.hissing_consonant_sounds)
-
-        for i in range(0, consonant_count_after):
-            consonant_after += random.choice(self.consonant_sounds + self.hissing_consonant_sounds)
-            if i + 1 == consonant_count_after and consonant_after[-1:] in self.hissing_consonant_sounds:
-                self.no_hissing = True
-
-        #print(consonant_before + vowel + consonant_after)
-        self.word += consonant_before + vowel + consonant_after
-
-    def gimmi(self):
-        print(self.word.capitalize())
-
-name_test = random_language_rus()
-name_test.make_syllable(random.randint(0, MAX_SLOG_CONSONANT_IN_ROW), random.randint(0, MAX_SLOG_CONSONANT_IN_ROW))
-name_test.make_syllable(random.randint(0, MAX_SLOG_CONSONANT_IN_ROW), random.randint(0, MAX_SLOG_CONSONANT_IN_ROW))
-name_test.make_syllable(random.randint(0, MAX_SLOG_CONSONANT_IN_ROW), random.randint(0, MAX_SLOG_CONSONANT_IN_ROW))
-name_test.gimmi()
-
+b = test_print()
+b.print_yerself()
 
 yet_another_message = "New turn has start, command me your majesty! "
 list_of_pc_objects = []
 list_of_locations = []
 # Define the main process here
-class character():
+class character:
     def __init__(self, id, name=None):
         self.id = id
         if name is None:
@@ -121,7 +46,7 @@ class character():
     def describe(self):
         print("Your name is " + self.name)
 
-class location():
+class location:
     def __init__(self, id, name=None):
         self.id = id
         if name is None:

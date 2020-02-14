@@ -6,6 +6,9 @@ MAX_PRINT_LIST_NUMBER = 10
 # Max for string input
 MAX_STRING_SIZE = 10
 
+# To prevent unreadable words
+MAX_SLOG_CONSONANT_IN_ROW = 2
+
 # Range for int
 MAX_INT_RANGE = {"min": 0, "max": 100}
 

@@ -1,4 +1,5 @@
 import globals
+import random
 
 # I keep all working functions pars here
 # Usually it's just procedural ones, with clean return, not related to any objects
@@ -113,3 +114,138 @@ def entry_point(message=None, asked_type=None, int_min=None, int_max=None, stric
             print("It is more, then "+ globals.MAX_STRING_SIZE + ", I will cut it")
             user_command = user_command[:globals.MAX_STRING_SIZE]
     return user_command
+
+# I cannot make it any better, on this level
+'''
+ёё|ёщ|ыё|ёу|йэ|гъ|кщ|щф|щз|эщ|щк|гщ|щп|щт|щш|щг|щм|фщ|щл|щд|дщ|ьэ|чц|вй|ёц|ёэ|ёа|йа|шя|шы|ёе|йё|гю|хя|йы|ця|гь|сй|хю|хё|
+ёи|ёо|яё|ёя|ёь|ёэ|ъж|эё|ъд|цё|уь|щч|чй|шй|шз|ыф|жщ|жш|жц|ыъ|ыэ|ыю|ыь|жй|ыы|жъ|жы|ъш|пй|ъщ|зщ|ъч|ъц|ъу|ъф|ъх|ъъ|ъы|ыо|жя|
+зй|ъь|ъэ|ыа|нй|еь|цй|ьй|ьл|ьр|пъ|еы|еъ|ьа|шъ|ёы|ёъ|ът|щс|оь|къ|оы|щх|щщ|щъ|щц|кй|оъ|цщ|лъ|мй|шщ|ць|цъ|щй|йь|ъг|иъ|ъб|ъв|
+ъи|ъй|ъп|ър|ъс|ъо|ън|ък|ъл|ъм|иы|иь|йу|щэ|йы|йъ|щы|щю|щя|ъа|мъ|йй|йж|ьу|гй|эъ|уъ|аь|чъ|хй|тй|чщ|ръ|юъ|фъ|уы|аъ|юь|аы|юы|
+эь|эы|бй|яь|ьы|ьь|ьъ|яъ|яы|хщ|дй|фй
+'''
+
+class random_language_rus:
+    def __init__(self, syllable_count=3):
+        self.word = ""
+        self.has_yo = False
+        self.no_hissing = False
+        self.syllable_count = syllable_count
+        self.state = {
+
+        }
+        if self.syllable_count < 1:
+            i = abs(self.syllable_count)
+            while True:
+                i -= 1
+                self.word += random.choice(self.mark_hard + self.mark_sweet + self.strange_letter)
+                if i == 0:
+                    break
+
+        self.vowel_sounds = [
+            "а", "и", "о", "у", "э",
+        ]
+        self.yo_no_his_vowel_sounds = [
+         #   "ю", "я",
+        ]
+        self.yo_vowel_sounds = [
+            "е",
+        ]
+        self.strange_letter = [
+         #   "ы",
+        ]
+        self.yo = [
+          #  "ё"
+        ]
+        self.consonant_sounds = [
+            "б", "в", "г", "д", "з", "к", "л", "м", "н", "п", "р", "с", "т",
+            #"ф", "х", "ц", "й",
+        ]
+        self.mark_sweet = [
+            "ь",
+        ]
+        self.mark_hard = [
+            "ъ",
+        ]
+        self.hissing_consonant_sounds = [
+         #   "ж", "ч", "ш", "щ",
+        ]
+
+    # open and close syllable defined by count of consonant after vowel, so no need to separate them
+    def make_syllable(self, consonant_count_before=0, consonant_count_after=0, with_strange=True):
+        consonant_before = ""
+        consonant_after = ""
+        # because in russian - one vowel equal one syllable, we take vowel first and control the count of consonants
+        # I collect vowel list here for comfort, because vowel can be in any place
+        vowel_list = self.vowel_sounds + self.yo_vowel_sounds
+        # check, if hissing letter was in previous syllable - we cannot use 'ю', 'я' or 'ы' after hissing
+        if not self.no_hissing:
+            vowel_list += self.yo_no_his_vowel_sounds
+        # we can use only one 'ё' in word, so do not pick it if it is in previous syllable
+        if not self.has_yo:
+            vowel_list += self.yo
+        # in additional, 'ы' is not very often letter, so need to switch it
+        if with_strange:
+            vowel_list += self.strange_letter
+        # get the vowel
+        vowel = random.choice(vowel_list)
+        # word cannot start word from 'ы'
+        if vowel in self.strange_letter:
+            consonant_count_before += 1
+        # check if it's 'ё'
+        if vowel in self.yo:
+            self.has_yo = True
+        # check if it's no hissing letter for after consonant or next syllable
+        if vowel in self.yo_no_his_vowel_sounds or vowel in self.strange_letter:
+            self.no_hissing = True
+
+        # need to make separate consonant creators for before and after
+        # or probably not...
+        if consonant_count_before > 0:
+            pass
+        for i in range(0, consonant_count_before):
+            # but for consonant - it depends on the place
+            if i + 1 == consonant_count_before and self.no_hissing:
+                consonant_before += random.choice(self.consonant_sounds)
+                self.no_hissing = False
+            else:
+                consonant_before += random.choice(self.consonant_sounds + self.hissing_consonant_sounds)
+
+        for i in range(0, consonant_count_after):
+            consonant_after += random.choice(self.consonant_sounds + self.hissing_consonant_sounds)
+            if i + 1 == consonant_count_after and consonant_after[-1:] in self.hissing_consonant_sounds:
+                self.no_hissing = True
+
+        #print(consonant_before + vowel + consonant_after)
+        self.word += consonant_before + vowel + consonant_after
+
+    def consonant_before(self, count=1):
+
+        # should not cycle here - it hardly depends on order and place
+        for i in range(0, count):
+            # but for consonant - it depends on the place
+            if i + 1 == count and self.no_hissing:
+                consonant_before += random.choice(self.consonant_sounds)
+                self.no_hissing = False
+            else:
+                consonant_before += random.choice(self.consonant_sounds + self.hissing_consonant_sounds)
+
+    def gimmi(self):
+        print(self.word.capitalize())
+
+def generate_new_name():
+    name_test = random_language_rus()
+    first_letter = random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW)
+    second_letter = 2
+    third_letter = 0
+    if first_letter == 0:
+        second_letter = 0
+        third_letter = 2
+    name_test.make_syllable(first_letter, second_letter)
+    name_test.make_syllable(third_letter, 1)
+    name_test.gimmi()
+
+#name_test = random_language_rus()
+#name_test.make_syllable(random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW), random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW))
+#name_test.make_syllable(random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW), random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW))
+#name_test.make_syllable(random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW), random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW))
+#name_test.gimmi()
