@@ -6,6 +6,79 @@ import random
 import string
 
 
+def rus_to_eng(rus_word):
+    eng_word = ''
+    for L in rus_word.lower():
+        if L == ' ':
+            eng_word += ' '
+        elif L == 'а':
+            eng_word += 'a'
+        elif L == 'б':
+            eng_word += 'b'
+        elif L == 'в':
+            eng_word += 'v'
+        elif L == 'г':
+            eng_word += 'g'
+        elif L == 'д':
+            eng_word += 'd'
+        elif L == 'е':
+            eng_word += 'e'
+        elif L == 'ё':
+            eng_word += 'jo'
+        elif L == 'ж':
+            eng_word += 'zh'
+        elif L == 'з':
+            eng_word += 'z'
+        elif L == 'и':
+            eng_word += 'i'
+        elif L == 'й':
+            eng_word += 'jj'
+        elif L == 'к':
+            eng_word += 'k'
+        elif L == 'л':
+            eng_word += 'l'
+        elif L == 'м':
+            eng_word += 'm'
+        elif L == 'н':
+            eng_word += 'n'
+        elif L == 'о':
+            eng_word += 'o'
+        elif L == 'п':
+            eng_word += 'p'
+        elif L == 'р':
+            eng_word += 'r'
+        elif L == 'с':
+            eng_word += 's'
+        elif L == 'т':
+            eng_word += 't'
+        elif L == 'у':
+            eng_word += 'u'
+        elif L == 'ф':
+            eng_word += 'f'
+        elif L == 'х':
+            eng_word += 'kh'
+        elif L == 'ц':
+            eng_word += 'c'
+        elif L == 'ч':
+            eng_word += 'ch'
+        elif L == 'ш':
+            eng_word += 'sh'
+        elif L == 'щ':
+            eng_word += 'shh'
+        elif L == 'ь':
+            eng_word += '``'
+        elif L == 'ы':
+            eng_word += 'y'
+        elif L == 'ъ':
+            eng_word += '`'
+        elif L == 'э':
+            eng_word += 'eh'
+        elif L == 'ю':
+            eng_word += 'ju'
+        elif L == 'я':
+            eng_word += 'ja'
+    return eng_word
+
 yet_another_message = "New turn has start, command me your majesty! "
 list_of_pc_objects = []
 list_of_locations = []
@@ -15,7 +88,7 @@ class character:
         self.id = id
         if name is None:
             name = tools.generate_new_name()
-        self.name = name.capitalize()
+        self.name = rus_to_eng(name).capitalize()
 
     def describe(self):
         print("Your name is " + self.name)
@@ -25,7 +98,7 @@ class location:
         self.id = id
         if name is None:
             name = tools.generate_new_name()
-        self.name = name.capitalize()
+        self.name = rus_to_eng(name).capitalize()
 
     def describe(self):
         print("This is the place, called " + self.name)
