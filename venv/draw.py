@@ -11,14 +11,27 @@ list_of_pc_objects = []
 list_of_locations = []
 # Define the main process here
 class character:
-    def __init__(self, id, name=None):
+    def __init__(self, id, main=False, name=None, title=None, home=None):
         self.id = id
+        self.main = main
         if name is None:
             name = tools.generate_new_name()
         self.name = name.capitalize()
+        if title is None:
+            title = "nobody"
+        self.title = title.capitalize()
+        if home is None:
+            home = tools.generate_new_name()
+        self.home = home.capitalize()
+
 
     def describe(self):
-        print("Your name is " + self.name)
+        if self.main:
+            print("Your name is " + self.name + " you are the " + self.title + " from " + self.home)
+        else:
+            print("This one's name is " + self.name + " The " + self.title + " from " + self.home)
+
+
 
 class location:
     def __init__(self, id, name=None):
@@ -28,7 +41,7 @@ class location:
         self.name = name.capitalize()
 
     def describe(self):
-        print("This is the place, called " + self.name)
+        print("There is a place, called " + self.name + ", but nobody knows about it")
 
 class main_process():
     def __init__(self):
@@ -41,9 +54,6 @@ class main_process():
             print("Smartass, ya?")
             char_name = tools.generate_new_name()
             print("I will call you " + char_name.capitalize() + " for that")
-        main_PC = character("main_PC", name=char_name)
-        list_of_pc_objects.append(main_PC)
-        main_PC.describe()
         start_town_name = tools.entry_point("What the name of your hometown? ", str_max=10)
         if start_town_name == "":
             print("I do not like you already")
@@ -51,6 +61,9 @@ class main_process():
             print("I'm sure, that you from this place " + start_town_name.capitalize())
         start_town = location("start_town", name=start_town_name)
         list_of_locations.append(start_town)
+        main_PC = character("main_PC", main=True, name=char_name, home=start_town_name)
+        list_of_pc_objects.append(main_PC)
+        main_PC.describe()
         start_town.describe()
 
     def running(self):
@@ -130,11 +143,3 @@ class event_handler():
         if todoing in self.event_list:
             self.start_event_list += self.event_list[todoing]["start"]
             self.past_event_list += self.event_list[todoing]["end"]
-
-def initialle():
-    direction = input("Do you want to go adventure? ")
-    if direction.upper() in globals.LIST_OF_ACCEPT_CHARACTERS:
-        print("So you drink a cup of wine, sing the song and go in nowhere!")
-    else:
-        print("You want to stay in your dirty old farm forever")
-    print("Anyway, we start to emulate life right now!")
