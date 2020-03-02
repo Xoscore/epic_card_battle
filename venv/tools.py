@@ -325,5 +325,5 @@ def rus_to_eng(rus_word):
         elif L == 'я':
             eng_word += 'ja'
         elif L in (string.ascii_lowercase):
-            pass
+            eng_word += L
     return eng_word

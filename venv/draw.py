@@ -5,43 +5,59 @@ import globals
 import random
 import string
 
+list_of_possible_gender = ["male", "female", "undefine"]
 
 yet_another_message = "New turn has start, command me your majesty! "
 list_of_pc_objects = []
 list_of_locations = []
 # Define the main process here
 class character:
-    def __init__(self, id, main=False, name=None, title=None, home=None):
+    def __init__(self, id, main=False, name=None, gender=None, title=None, home=None):
         self.id = id
         self.main = main
         if name is None:
             name = tools.generate_new_name()
         self.name = name.capitalize()
+        if gender is None:
+            gender = "undefine"
+        self.gender = gender
         if title is None:
             title = "nobody"
-        self.title = title.capitalize()
+        self.title = title
         if home is None:
             home = tools.generate_new_name()
         self.home = home.capitalize()
 
-
     def describe(self):
         if self.main:
-            print("Your name is " + self.name + " you are the " + self.title + " from " + self.home)
+            gender = ""
+            if self.gender == "male":
+                gender = " - the man "
+            elif self.gender == "female":
+                gender = " - the woman "
+            print("Your name is " + self.name + " you are the " + self.title + gender + " from " + self.home)
         else:
-            print("This one's name is " + self.name + " The " + self.title + " from " + self.home)
+            gender = " one's "
+            if self.gender == "male":
+                gender = " man's "
+            elif self.gender == "female":
+                gender = " woman's "
+            print("This" + gender + "name is " + self.name + " The " + self.title + "from " + self.home)
 
 
 
 class location:
-    def __init__(self, id, name=None):
+    def __init__(self, id, name=None, description=None):
         self.id = id
         if name is None:
             name = tools.generate_new_name()
         self.name = name.capitalize()
+        if description is None:
+            description = "but nobody knows about it"
+        self.description = description
 
     def describe(self):
-        print("There is a place, called " + self.name + ", but nobody knows about it")
+        print("There is a place, called " + self.name + ", " + self.description)
 
 class main_process():
     def __init__(self):
@@ -49,20 +65,24 @@ class main_process():
 
     def start_game(self):
         print("The game has started")
+
         char_name = tools.entry_point("What is your name?")
         if char_name == "":
-            print("Smartass, ya?")
             char_name = tools.generate_new_name()
-            print("I will call you " + char_name.capitalize() + " for that")
+            print("I will call you " + char_name.capitalize() + " this time")
+
         start_town_name = tools.entry_point("What the name of your hometown? ", str_max=10)
         if start_town_name == "":
-            print("I do not like you already")
             start_town_name = tools.generate_new_name()
             print("I'm sure, that you from this place " + start_town_name.capitalize())
         start_town = location("start_town", name=start_town_name)
         list_of_locations.append(start_town)
-        main_PC = character("main_PC", main=True, name=char_name, home=start_town_name)
+
+        gender = tools.entry_point("What is your gender?", list_of_possible_gender)
+
+        main_PC = character("main_PC", main=True, name=char_name, gender=gender, home=start_town_name)
         list_of_pc_objects.append(main_PC)
+
         main_PC.describe()
         start_town.describe()
 
