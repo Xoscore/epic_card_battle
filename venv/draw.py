@@ -45,7 +45,6 @@ class character:
             print("This" + gender + "name is " + self.name + " The " + self.title + "from " + self.home)
 
 
-
 class location:
     def __init__(self, id, name=None, description=None):
         self.id = id
@@ -58,6 +57,7 @@ class location:
 
     def describe(self):
         print("There is a place, called " + self.name + ", " + self.description)
+
 
 class main_process():
     def __init__(self):
@@ -99,6 +99,7 @@ class main_process():
 
     def on_exit(self):
         self.flag_is_playing = False
+
 
 new_game = main_process()
 new_game.running()
@@ -163,3 +164,38 @@ class event_handler():
         if todoing in self.event_list:
             self.start_event_list += self.event_list[todoing]["start"]
             self.past_event_list += self.event_list[todoing]["end"]
+
+
+# Yet another try to make new language generator
+# But this time, I make something completely different
+# Instead of put rules one by one
+# I make infrustructure first
+# The goal is to make some container and transporter
+# Both, they need to ask what was before and then tell what become next
+
+'''
+ёё|ёщ|ыё|ёу|йэ|гъ|кщ|щф|щз|эщ|щк|гщ|щп|щт|щш|щг|щм|фщ|щл|щд|дщ|ьэ|чц|вй|ёц|ёэ|ёа|йа|шя|шы|ёе|йё|гю|хя|йы|ця|гь|сй|хю|хё|
+ёи|ёо|яё|ёя|ёь|ёэ|ъж|эё|ъд|цё|уь|щч|чй|шй|шз|ыф|жщ|жш|жц|ыъ|ыэ|ыю|ыь|жй|ыы|жъ|жы|ъш|пй|ъщ|зщ|ъч|ъц|ъу|ъф|ъх|ъъ|ъы|ыо|жя|
+зй|ъь|ъэ|ыа|нй|еь|цй|ьй|ьл|ьр|пъ|еы|еъ|ьа|шъ|ёы|ёъ|ът|щс|оь|къ|оы|щх|щщ|щъ|щц|кй|оъ|цщ|лъ|мй|шщ|ць|цъ|щй|йь|ъг|иъ|ъб|ъв|
+ъи|ъй|ъп|ър|ъс|ъо|ън|ък|ъл|ъм|иы|иь|йу|щэ|йы|йъ|щы|щю|щя|ъа|мъ|йй|йж|ьу|гй|эъ|уъ|аь|чъ|хй|тй|чщ|ръ|юъ|фъ|уы|аъ|юь|аы|юы|
+эь|эы|бй|яь|ьы|ьь|ьъ|яъ|яы|хщ|дй|фй
+'''
+vowels = ['а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я']
+# The minimal element of this - syllable, and we need to describe it properly
+# Actualy, there is a two ways to make it correct prononsed
+# 1) Restrict all incorrect ways
+# 2) Add something, to make it correct again
+class Syllable:
+    def __init__(self):
+        # We have some consonants before
+        self.consonant_before
+        # We have the core - vowel
+        self.vowel
+        # We have some consonants after
+        self.consonant_after
+
+    # Output one syllable
+    def print(self):
+        print(self.cononant_before + self.vowel + self.consonant_after)
+
+
