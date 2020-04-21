@@ -244,7 +244,8 @@ def generate_new_name():
     name_test.make_syllable(first_letter, second_letter)
     name_test.make_syllable(third_letter, 1)
     new_name = name_test.gimmi()
-    return rus_to_eng(new_name)
+    #return rus_to_eng(new_name)
+    return new_name
 
 #name_test = random_language_rus()
 #name_test.make_syllable(random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW), random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW))
