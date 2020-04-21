@@ -233,7 +233,8 @@ class random_language_rus:
     def gimmi(self):
         return self.word
 
-def generate_new_name():
+
+def generate_new_name(rus=False):
     name_test = random_language_rus()
     first_letter = random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW)
     second_letter = 2
@@ -244,8 +245,10 @@ def generate_new_name():
     name_test.make_syllable(first_letter, second_letter)
     name_test.make_syllable(third_letter, 1)
     new_name = name_test.gimmi()
-    #return rus_to_eng(new_name)
-    return new_name
+    if rus:
+        return new_name
+    else:
+        return rus_to_eng(new_name)
 
 #name_test = random_language_rus()
 #name_test.make_syllable(random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW), random.randint(0, globals.MAX_SLOG_CONSONANT_IN_ROW))
