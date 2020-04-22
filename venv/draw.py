@@ -173,10 +173,24 @@ class event_handler():
 
 class World:
     def __init__(self):
+        self.id = "localhost"
+        # Each world can actively contain several territories on one local machine
         self.territories = []
 
-    def new_territory(self):
-        pass
+
+# One of territory option - is climate
+# Later
+climates = ["dry", "wet", "cold", "hot"]
+# This is the type of continent, that affect earth and caves type
+platform_types = [
+    "motherland", # One big continent - a stable platform
+    "one_big_lot_small", # Also one big, but with lot of small ones around - that means vulcano activities, islands and
+    # so on
+    "lot_small", # A lot of small continents, collide each other, earthquakes and vulkano ahead
+    "amorph", # The platform is too soft (sand, clay) to make it solid, no quake and caves
+    "bubbles" # A lot of big rocky bubbles with gas, liquid and other materials inside, a lot of caves
+]
+
 
 # That territories is a country size, controlled by one nation group
 class Territory:
@@ -184,14 +198,20 @@ class Territory:
         # Not sure, if I need to have id, but want to make sure, it have unique one for now
         self.id = "terr_1"
         self.name = tools.generate_new_name()
+        self.climate = random.choice(climates)
+        self.platform = random.choice(platform_types)
+        # It just name for now
+        self.nation = tools.generate_new_name()
 
         # How many lands inside this territory
         self.size = random.randint(10,16)
         for i in range(0, self.size):
+            # generate lands here
             pass
 
 
-land_feature = ["woody", "river", "desert", "grassland"]
+land_base_feature = ["wood", "desert", "grassland", "mauntine"]
+land_additional_feature = ["river", "cave_entry", "hills"]
 
 
 # So the land is a one big notable feature, like mountian, grassfield or forest
