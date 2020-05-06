@@ -4,6 +4,8 @@ import tools
 import globals
 import random
 import string
+from sympy import *
+from sympy import geometry
 
 
 list_of_possible_gender = ["male", "female", "undefine"]
@@ -111,7 +113,7 @@ class main_process():
 # world
 # So, There are some territory
 # The main spot - it's not like a square with 1 km size or so, it's more like province, that can hold one big city
-class territory:
+class Territory:
     def __init__(self, name):
         self.name = name
         self.comment = None
@@ -232,7 +234,16 @@ class Territory:
         # It just name for now
         self.nation = tools.generate_new_name()
 
-        # How many lands inside this territory
+        # Now the main feature, I want to add today
+        # Because all lands are for one nation, and so far for one government, there is only one capital in such
+        #   territory
+        # So, make capital land as a center of abstract circle, where all lands are equally far (but +- by roads and
+        #   obstacles)
+        # All generated lands then - are circular sectors around, randomly placed on the circle
+        # The number of lands are not limited - it can be added new portals, pocket universe, hell, heaven, chaos gates
+        #   and so on and so on
+        # But interception between sectors, means how far this one from another
+
         self.size = random.randint(10,16)
         for i in range(0, self.size):
             # generate lands here
@@ -266,8 +277,9 @@ class Location:
     def __init__(self):
         pass
 
-tester = World()
-tester.create_new_territory()
-tester.create_new_territory()
-print(tester.territories)
-print(tester.territories_count())
+
+# At first we need some algebra magic here
+# I need a circle
+capital = Point(0, 0)
+territory = Circle(capital, 1)
+# Now, I need a sector of this circle
