@@ -169,17 +169,44 @@ class event_handler():
 
 # So, what I want to do now
 # There are some world, and I mean the whole world inside local machine
+# It has no any special properties, instead of list of territory, nations and gates
 # This world contains several territories, for tribes
 
+# There is one question, why I make world and their territory by separate objects?
+# At first, world is about transportation and infrastructure, territory all about nation and rule, they has no cross
+#   information
+# At second, territory can be totally separate from world and go away, which is harder if it inherit some stuff
+
 class World:
-    def __init__(self):
+    def __init__(self, name=None):
         self.id = "localhost"
         # Each world can actively contain several territories on one local machine
+        if name is None:
+            name = tools.generate_new_name()
         self.territories = []
+        # Gates are connector to other worlds
+        self.gates = []
+
+    # TO FEATURE:
+    # Copy of all worlds with online status must be collected in some hub under new id with link to local one
+    # Worlds must exchange the list and status between each other from time to time
+    # Worlds cannot be destroyed or deleted
+    # If user decline the world, clean the machine or stop being online, this world make new copy, marked as "forbidden"
+    # (Also need to think, what if user create "forbidden" name of the world, as easter egg)
+    # This new copies will be offered as new created world (as it happens), to more experienced people
+    # It will contain some special features, like ruins of previous player, with some hidden story of what happens
+    #   with the old link to first player, so his world can be connected special way to new one
+    # I think it would be funny to boost both pvp and mentoring for such cases, that makes legend of "The lost curse of
+    #   forgotten worlds" are technically true
+    # Of cause this can be happened several times, so it is possible to create world with a lot of layers from previous
+    #   games
+    # Also because of this, more and more copies of the same world will appear, so central hubs must decide if merge
+    #   such versions into one (with some event happens) or finally de-link them
+    # To generate
 
 
 # One of territory option - is climate
-# Later
+# It is just example
 climates = ["dry", "wet", "cold", "hot"]
 # This is the type of continent, that affect earth and caves type
 platform_types = [
@@ -194,10 +221,12 @@ platform_types = [
 
 # That territories is a country size, controlled by one nation group
 class Territory:
-    def __init__(self):
+    def __init__(self, name):
         # Not sure, if I need to have id, but want to make sure, it have unique one for now
         self.id = "terr_1"
-        self.name = tools.generate_new_name()
+        if name is None:
+            name = tools.generate_new_name()
+        self.name = name
         self.climate = random.choice(climates)
         self.platform = random.choice(platform_types)
         # It just name for now
@@ -236,3 +265,9 @@ class Land:
 class Location:
     def __init__(self):
         pass
+
+tester = World()
+tester.create_new_territory()
+tester.create_new_territory()
+print(tester.territories)
+print(tester.territories_count())
