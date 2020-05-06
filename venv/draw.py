@@ -315,9 +315,15 @@ def intercept_checker(a1, a2, b1, b2):
             return "intercept"
 
 
-print(intercept_checker(1, 3, 5, 7))
-print(intercept_checker(1, 5, 3, 7))
-print(intercept_checker(1, 7, 3, 5))
-print(intercept_checker(3, 7, 1, 5))
-print(intercept_checker(3, 5, 1, 7))
-print(intercept_checker(5, 7, 1, 3))
+assert intercept_checker(1, 3, 5, 7) == "no"
+assert intercept_checker(1, 5, 3, 7) == "intercept"
+assert intercept_checker(1, 7, 3, 5) == "included"
+assert intercept_checker(3, 7, 1, 5) == "intercept"
+assert intercept_checker(3, 5, 1, 7) == "included"
+assert intercept_checker(5, 7, 1, 3) == "no"
+
+# Now, back to problem with the degree
+# The angle show the point between [0, 360) on the circle
+# And after 360 value, it should start over, so 369 degree = 9 degree
+# Probably I need to use functions (like cosines or sinus), instead of raw angle value
+print(8*pi - 2*pi)
