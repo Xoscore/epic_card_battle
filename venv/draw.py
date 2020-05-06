@@ -280,6 +280,44 @@ class Location:
 
 # At first we need some algebra magic here
 # I need a circle
+radius = 1
 capital = Point(0, 0)
-territory = Circle(capital, 1)
+territory = Circle(capital, radius)
+print(pi/2)
+
 # Now, I need a sector of this circle
+
+# By game, it is enough only two value to keep - angle and the lenght of this sector (the less, the better)
+
+# Well, sorry, I need some time to remember circular points calculation =)
+# So, the only coordinate, any point on circle have is angle
+# But we need a two point, to make some area on that circle
+# Happily, I need only one coordinate for each point
+
+
+# We just need interception of this two sectors
+# They intercept if any of the point in one sector are in second sector
+# And we can take the border value to check
+def intercept_checker(a1, a2, b1, b2):
+    if a1 < b1:
+        if a2 < b1:
+            return "no"
+        elif a2 > b2:
+            return "included"
+        else:
+            return "intercept"
+    else:
+        if a1 > b2:
+            return "no"
+        elif a2 < b2:
+            return "included"
+        else:
+            return "intercept"
+
+
+print(intercept_checker(1, 3, 5, 7))
+print(intercept_checker(1, 5, 3, 7))
+print(intercept_checker(1, 7, 3, 5))
+print(intercept_checker(3, 7, 1, 5))
+print(intercept_checker(3, 5, 1, 7))
+print(intercept_checker(5, 7, 1, 3))
