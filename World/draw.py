@@ -6,6 +6,8 @@ import random
 import string
 from sympy import *
 from sympy import geometry
+import tabulate
+import math
 
 
 list_of_possible_gender = ["male", "female", "undefine"]
@@ -113,6 +115,7 @@ class main_process():
 # world
 # So, There are some territory
 # The main spot - it's not like a square with 1 km size or so, it's more like province, that can hold one big city
+'''
 class Territory:
     def __init__(self, name):
         self.name = name
@@ -131,7 +134,7 @@ class Territory:
             #print("This land have " + str(self.climat) + " , with a " + str(self.vegetaion))
             #print("This land is bordered by %border_list%")
             self.full_description = False
-
+'''
 class event_handler():
     def __init__(self):
         self.turn_number = 1
@@ -250,6 +253,10 @@ class Territory:
             pass
 
 
+# Well, I need a capital land, with full control of player
+# So he can kill and destroy everithing. change climate, and recultivate with any nations, guilds and ordens
+capital = Territory("Capital")
+
 land_base_feature = ["wood", "desert", "grassland", "mauntine"]
 land_additional_feature = ["river", "cave_entry", "hills"]
 
@@ -262,7 +269,7 @@ class Land:
         self.name = tools.generate_new_name()
         self.size = random.randint(10,16)
         # It can  e several features inside one territory, although it should not conflict each other, so leave it now
-        self.feature = random.choice(land_feature)
+        self.feature = random.choice(land_base_feature)
 
 # And in the end, there are location inside that land
 # Locations is not that strict - it can be many in big city or just few in the desert
@@ -283,7 +290,50 @@ class Location:
 radius = 1
 capital = Point(0, 0)
 territory = Circle(capital, radius)
-print(pi/2)
+
+# First param is angle alfa
+# for now without overlaps
+alfa = random.randint(0, 270)
+
+# second param angle fi, the main angle of sector
+fi = random.randint(1, 90)
+
+# Point A on this circle have coordinates
+point_A = Point(cos(math.radians(alfa)), sin(math.radians(alfa)))
+
+point_B = Point(cos(math.radians(alfa + fi)), sin(math.radians(alfa + fi)))
+'''
+print(capital)
+print(territory)
+print(alfa)
+print(math.radians(alfa))
+print(fi)
+print(alfa + fi)
+print(math.radians(alfa + fi))
+print(point_A)
+print(point_B)
+'''
+alfa_1 = 10
+fi_1 = 10
+
+alfa_2 = 370
+fi_2 = 10
+
+point_A1 = Point(cos(math.radians(alfa_1)), sin(math.radians(alfa_1)))
+point_B1 = Point(cos(math.radians(alfa_1 + fi_1)), sin(math.radians(alfa_1 + fi_1)))
+
+point_A2 = Point(cos(math.radians(alfa_2)), sin(math.radians(alfa_2)))
+point_B2 = Point(cos(math.radians(alfa_2 + fi_2)), sin(math.radians(alfa_2 + fi_2)))
+
+print(point_A1)
+print(point_B1)
+print(point_A2)
+print(point_B2)
+
+# Well, I get the points
+# Point itself lie on circle, but really, I do not need circle itself
+# So, well, the each territory have only two coordinates - alfa and fi
+
 
 # Now, I need a sector of this circle
 
@@ -327,3 +377,17 @@ assert intercept_checker(5, 7, 1, 3) == "no"
 # And after 360 value, it should start over, so 369 degree = 9 degree
 # Probably I need to use functions (like cosines or sinus), instead of raw angle value
 print(8*pi - 2*pi)
+
+arcs_rads = [0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6, 2.8, 3.0, 3.2, 3.4, 3.6, 3.8, 4,
+        4.2, 4.4, 4.6, 4.8, 5, 5.2, 5.4, 5.6, 5.8, 6.0, 6.2, 6.4, 6.6, 6.8, 7]
+arcs = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180,
+        190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360,
+        370, 380, 390, 400]
+all_arcs = []
+for arc in arcs:
+    all_funcs = [arc, math.radians(arc), sin(math.radians(arc)), cos(math.radians(arc)),
+                 tan(math.radians(arc)), cot(math.radians(arc)), atan(math.radians(arc)),
+                 acot(math.radians(arc))]
+    all_arcs.append(all_funcs)
+# Well, I need to calculate and show all trigonometry functions, to decide wich one I need, for my purpose
+# print(tabulate.tabulate(all_arcs, headers=["arc", "rads", "sin", "cos", "tan", "cot", "atan", "acot"]))
