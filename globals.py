@@ -15,7 +15,7 @@ MAX_INT_RANGE = {"min": 0, "max": 100}
 # List of characters, that accepted as "Yes"
 LIST_OF_ACCEPT_CHARACTERS = ["Y", "YES", "YEP", "Д", "ДА", "E"]
 
-# List of characters, that accepted as "No" for `Strictyes` feature
+# List of characters, that accepted as "No" for `Strict yes` feature
 LIST_OF_DECLINE_CHARACTERS = ["N", "NO", "NOPE", "Н", "НЕ", "НЕТ"]
 
 # Need to point on something

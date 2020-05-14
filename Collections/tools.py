@@ -1,9 +1,9 @@
 import globals
 import random
 import string
-
 # I keep all working functions pars here
 # Usually it's just procedural ones, with clean return, not related to any objects
+
 
 # I need procedural tool to make a good string from list
 # Usage:
@@ -19,7 +19,7 @@ def tool_list_to_string(some_list, appeal=None, shorten_list=True):
         else:
             list_name = "thing"
         if len(some_list["contain"]) == 0:
-            output_string = appeal    + "no any " + list_name + "s"
+            output_string = appeal + "no any " + list_name + "s"
         elif len(some_list["contain"]) == 1:
             output_string = appeal + "one " + list_name + ", it is the " + str(some_list["contain"][0])
         elif len(some_list["contain"]) > globals.MAX_PRINT_LIST_NUMBER and shorten_list:
@@ -42,6 +42,7 @@ def tool_list_to_string(some_list, appeal=None, shorten_list=True):
     else:
         raise TypeError("This function is for list or dict only! " + str(type(some_list)) + " incoming!")
     return output_string
+
 
 # My own function to parse input
 # Examples:
@@ -72,7 +73,7 @@ def entry_point(message=None, asked_type=None, int_min=None, int_max=None, stric
             int_max = globals.MAX_INT_RANGE["max"]
         ask_for_type = " Input number, from " + str(int_min) + " to " + \
                        str(int_max) + ", please: "
-        #TODO This part try to repeat input until desired typr has inputted
+        # TODO This part try to repeat input until desired type has inputted
         # Need to improve this part to make it on the same line of screen
         # when the UI will be ready, to do not let user forget what he should input
         while True:
@@ -112,9 +113,10 @@ def entry_point(message=None, asked_type=None, int_min=None, int_max=None, stric
             str_max = globals.MAX_STRING_SIZE
         user_command = input(message + ask_for_type)
         if len(user_command) > globals.MAX_STRING_SIZE:
-            print("It is more, then "+ globals.MAX_STRING_SIZE + ", I will cut it")
+            print("It is more, then " + globals.MAX_STRING_SIZE + ", I will cut it")
             user_command = user_command[:globals.MAX_STRING_SIZE]
     return user_command
+
 
 # I cannot make it any better, on this level
 '''
@@ -124,6 +126,7 @@ def entry_point(message=None, asked_type=None, int_min=None, int_max=None, stric
 ъи|ъй|ъп|ър|ъс|ъо|ън|ък|ъл|ъм|иы|иь|йу|щэ|йы|йъ|щы|щю|щя|ъа|мъ|йй|йж|ьу|гй|эъ|уъ|аь|чъ|хй|тй|чщ|ръ|юъ|фъ|уы|аъ|юь|аы|юы|
 эь|эы|бй|яь|ьы|ьь|ьъ|яъ|яы|хщ|дй|фй
 '''
+
 
 class random_language_rus:
     def __init__(self, syllable_count=3):
@@ -219,6 +222,9 @@ class random_language_rus:
         #print(consonant_before + vowel + consonant_after)
         self.word += consonant_before + vowel + consonant_after
 
+    def gimmi(self):
+        return self.word
+'''
     def consonant_before(self, count=1):
 
         # should not cycle here - it hardly depends on order and place
@@ -229,9 +235,7 @@ class random_language_rus:
                 self.no_hissing = False
             else:
                 consonant_before += random.choice(self.consonant_sounds + self.hissing_consonant_sounds)
-
-    def gimmi(self):
-        return self.word
+'''
 
 
 def generate_new_name(rus=False):

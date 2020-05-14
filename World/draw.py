@@ -1,6 +1,6 @@
 # Let's try it another way again and again and again
 # Imports
-import tools
+import Collections.tools as tools
 import globals
 import random
 import string
@@ -9,45 +9,124 @@ from sympy import geometry
 import tabulate
 import math
 
+# So, what I want to do now
+# There are some world, and I mean the whole world inside local machine
+# It has no any special properties, instead of list of territory, nations and gates
+# This world contains several territories, for tribes
 
-list_of_possible_gender = ["male", "female", "undefine"]
+# There is one question, why I make world and their territory by separate objects?
+# At first, world is about transportation and infrastructure, territory all about nation and rule, they has no cross
+#   information
+# At second, territory can be totally separate from world and go away, which is harder if it inherit some stuff
 
-yet_another_message = "New turn has start, command me your majesty! "
-list_of_pc_objects = []
-list_of_locations = []
-# Define the main process here
-class character:
-    def __init__(self, id, main=False, name=None, gender=None, title=None, home=None):
-        self.id = id
-        self.main = main
+# TO FEATURE:
+# Copy of all worlds with online status must be collected in some hub under new id with link to local one
+# Worlds must exchange the list and status between each other from time to time
+# Worlds cannot be destroyed or deleted
+# If user decline the world, clean the machine or stop being online, this world make new copy, marked as "forbidden"
+# (Also need to think, what if user create "forbidden" name of the world, as easter egg)
+# This new copies will be offered as new created world (as it happens), to more experienced people
+# It will contain some special features, like ruins of previous player, with some hidden story of what happens
+#   with the old link to first player, so his world can be connected special way to new one
+# I think it would be funny to boost both pvp and mentoring for such cases, that makes legend of "The lost curse of
+#   forgotten worlds" are technically true
+# Of cause this can be happened several times, so it is possible to create world with a lot of layers from previous
+#   games
+# Also because of this, more and more copies of the same world will appear, so central hubs must decide if merge
+#   such versions into one (with some event happens) or finally de-link them
+# To generate
+
+
+# Something about size of sectors
+TINY = [1, 5]
+SMALL = [5, 15]
+NORMAL = [15, 45]
+BIG = [45, 90]
+LARGE = [90, 179]
+TUNNEL = [180, 180]
+HUGE = [181, 359]
+COVER = [360, 360]
+
+
+def decide_fi(size):
+    return random.randint(size[0], size[1])
+
+
+def create_sector(alpha, fi):
+    point_a = Point(cos(math.radians(alpha)), sin(math.radians(alpha)))
+    point_b = Point(cos(math.radians(alpha + fi)), sin(math.radians(alpha + fi)))
+    if fi == 180:
+        # Such line will be used as tunnel, portal, transport field or something like this
+        sector = Line(point_a, point_b)
+    else:
+        sector = Triangle(Point(0, 0), point_a, point_b)
+    # I do not need exact sector, just triangle is fine enough
+    # The only reason to use circle at all - is make closed numerical line
+    return sector
+
+
+class World:
+    def __init__(self, name=None):
+        self.id = "localhost"
+        # Each world can actively contain several territories on one local machine
         if name is None:
             name = tools.generate_new_name()
-        self.name = name.capitalize()
-        if gender is None:
-            gender = "undefine"
-        self.gender = gender
-        if title is None:
-            title = "nobody"
-        self.title = title
-        if home is None:
-            home = tools.generate_new_name()
-        self.home = home.capitalize()
+        self.name = name
+        self.territories = []
+        # Gates are connector to other worlds
+        self.star_gates = []
+        self.description = ""
+        self.capital = self.create_capital
 
     def describe(self):
-        if self.main:
-            gender = ""
-            if self.gender == "male":
-                gender = " - the man "
-            elif self.gender == "female":
-                gender = " - the woman "
-            print("Your name is " + self.name + " you are the " + self.title + gender + " from " + self.home)
+        print("This is the world " + self.name)
+        if self.description == "":
+            print("There is no any description")
+
+    def create_new_territory(self, size=None, name=None):
+        if size is None:
+            size = decide_fi(NORMAL)
         else:
-            gender = " one's "
-            if self.gender == "male":
-                gender = " man's "
-            elif self.gender == "female":
-                gender = " woman's "
-            print("This" + gender + "name is " + self.name + " The " + self.title + "from " + self.home)
+            size = decide_fi(size)
+        if name is None:
+            name = tools.generate_new_name()
+        else:
+            name = name
+        territory = Territory(name, size)
+        self.territories.append(territory)
+
+    def create_capital(self):
+        pass
+
+
+# That territories is a country size, controlled by one nation group
+class Territory:
+    def __init__(self, name, size):
+        # Not sure, if I need to have id, but want to make sure, it have unique one for now
+        self.id = "terr_1"
+        if name is None:
+            name = tools.generate_new_name()
+        self.name = name
+        self.climate = random.choice(climates)
+        self.platform = random.choice(platform_types)
+        # It just name for now
+        self.nation = tools.generate_new_name()
+
+        # Now the main feature, I want to add today
+        # Because all lands are for one nation, and so far for one government, there is only one capital in such
+        #   territory
+        # So, make capital land as a center of abstract circle, where all lands are equally far (but +- by roads and
+        #   obstacles)
+        # All generated lands then - are circular sectors around, randomly placed on the circle
+        # The number of lands are not limited - it can be added new portals, pocket universe, hell, heaven, chaos gates
+        #   and so on and so on
+        # But interception between sectors, means how far this one from another
+
+        self.size = random.randint(10, 16)
+        for i in range(0, self.size):
+            # generate lands here
+            pass
+
 
 
 class location:
@@ -62,53 +141,6 @@ class location:
 
     def describe(self):
         print("There is a place, called " + self.name + ", " + self.description)
-
-
-class main_process():
-    def __init__(self):
-        self.flag_is_playing = True
-
-    def start_game(self):
-        print("The game has started")
-
-        char_name = tools.entry_point("What is your name?")
-        if char_name == "":
-            char_name = tools.generate_new_name()
-            print("I will call you " + char_name.capitalize() + " this time")
-
-        start_town_name = tools.entry_point("What the name of your hometown? ", str_max=10)
-        if start_town_name == "":
-            start_town_name = tools.generate_new_name()
-            print("I'm sure, that you from this place " + start_town_name.capitalize())
-        start_town = location("start_town", name=start_town_name)
-        list_of_locations.append(start_town)
-
-        gender = tools.entry_point("What is your gender?", list_of_possible_gender)
-
-        main_PC = character("main_PC", main=True, name=char_name, gender=gender, home=start_town_name)
-        list_of_pc_objects.append(main_PC)
-
-        main_PC.describe()
-        start_town.describe()
-
-    def running(self):
-        self.start_game()
-        while self.flag_is_playing:
-            command = tools.entry_point(yet_another_message)
-            if command == "name":
-                print(tools.generate_new_name().capitalize())
-            elif command == "exit":
-                self.flag_is_playing = False
-            else:
-                print("nothing happens")
-
-    def on_exit(self):
-        self.flag_is_playing = False
-
-
-#new_game = main_process()
-#new_game.running()
-
 
 # World generation
 # We need a simple rules, an initial state, some limitations and after all, collision between different parts of the
@@ -135,80 +167,6 @@ class Territory:
             #print("This land is bordered by %border_list%")
             self.full_description = False
 '''
-class event_handler():
-    def __init__(self):
-        self.turn_number = 1
-        self.doing = ""
-        self.start_event_list = []
-        self.past_event_list = []
-        self.event_list = {
-            "rain": {
-                "start": ["It's a rainy day today"],
-                "end": ["You become wet", "Your hairs wet"],
-            }
-        }
-
-    def before_start(self):
-        print("The turn " + str(self.turn_number) + " has started")
-        if len(self.start_event_list) != 0:
-            print(self.start_event_list.pop())
-        else:
-            print("Nothing happens yet")
-
-    def turn_process(self):
-        self.doing = input("What do you want to do? ")
-        self.check_doing(self.doing)
-
-    def after_turn(self):
-        print("In this turn you " + self.doing)
-        if len(self.past_event_list) != 0:
-            print(self.past_event_list.pop())
-        print("The turn " + str(self.turn_number) + " has ended")
-        self.turn_number += 1
-
-    def check_doing(self, todoing):
-        if todoing in self.event_list:
-            self.start_event_list += self.event_list[todoing]["start"]
-            self.past_event_list += self.event_list[todoing]["end"]
-
-
-# So, what I want to do now
-# There are some world, and I mean the whole world inside local machine
-# It has no any special properties, instead of list of territory, nations and gates
-# This world contains several territories, for tribes
-
-# There is one question, why I make world and their territory by separate objects?
-# At first, world is about transportation and infrastructure, territory all about nation and rule, they has no cross
-#   information
-# At second, territory can be totally separate from world and go away, which is harder if it inherit some stuff
-
-class World:
-    def __init__(self, name=None):
-        self.id = "localhost"
-        # Each world can actively contain several territories on one local machine
-        if name is None:
-            name = tools.generate_new_name()
-        self.territories = []
-        # Gates are connector to other worlds
-        self.gates = []
-
-    # TO FEATURE:
-    # Copy of all worlds with online status must be collected in some hub under new id with link to local one
-    # Worlds must exchange the list and status between each other from time to time
-    # Worlds cannot be destroyed or deleted
-    # If user decline the world, clean the machine or stop being online, this world make new copy, marked as "forbidden"
-    # (Also need to think, what if user create "forbidden" name of the world, as easter egg)
-    # This new copies will be offered as new created world (as it happens), to more experienced people
-    # It will contain some special features, like ruins of previous player, with some hidden story of what happens
-    #   with the old link to first player, so his world can be connected special way to new one
-    # I think it would be funny to boost both pvp and mentoring for such cases, that makes legend of "The lost curse of
-    #   forgotten worlds" are technically true
-    # Of cause this can be happened several times, so it is possible to create world with a lot of layers from previous
-    #   games
-    # Also because of this, more and more copies of the same world will appear, so central hubs must decide if merge
-    #   such versions into one (with some event happens) or finally de-link them
-    # To generate
-
 
 # One of territory option - is climate
 # It is just example
@@ -224,33 +182,6 @@ platform_types = [
 ]
 
 
-# That territories is a country size, controlled by one nation group
-class Territory:
-    def __init__(self, name):
-        # Not sure, if I need to have id, but want to make sure, it have unique one for now
-        self.id = "terr_1"
-        if name is None:
-            name = tools.generate_new_name()
-        self.name = name
-        self.climate = random.choice(climates)
-        self.platform = random.choice(platform_types)
-        # It just name for now
-        self.nation = tools.generate_new_name()
-
-        # Now the main feature, I want to add today
-        # Because all lands are for one nation, and so far for one government, there is only one capital in such
-        #   territory
-        # So, make capital land as a center of abstract circle, where all lands are equally far (but +- by roads and
-        #   obstacles)
-        # All generated lands then - are circular sectors around, randomly placed on the circle
-        # The number of lands are not limited - it can be added new portals, pocket universe, hell, heaven, chaos gates
-        #   and so on and so on
-        # But interception between sectors, means how far this one from another
-
-        self.size = random.randint(10,16)
-        for i in range(0, self.size):
-            # generate lands here
-            pass
 
 
 # Well, I need a capital land, with full control of player
@@ -287,21 +218,21 @@ class Location:
 
 # At first we need some algebra magic here
 # I need a circle
-radius = 1
+# radius = 1
 capital = Point(0, 0)
-territory = Circle(capital, radius)
+# territory = Circle(capital, radius)
 
 # First param is angle alfa
 # for now without overlaps
-alfa = random.randint(0, 270)
+#alfa = random.randint(0, 270)
 
 # second param angle fi, the main angle of sector
-fi = random.randint(1, 90)
+#fi = random.randint(1, 90)
 
 # Point A on this circle have coordinates
-point_A = Point(cos(math.radians(alfa)), sin(math.radians(alfa)))
+#point_A = Point(cos(math.radians(alfa)), sin(math.radians(alfa)))
 
-point_B = Point(cos(math.radians(alfa + fi)), sin(math.radians(alfa + fi)))
+#point_B = Point(cos(math.radians(alfa + fi)), sin(math.radians(alfa + fi)))
 '''
 print(capital)
 print(territory)
@@ -316,19 +247,10 @@ print(point_B)
 alfa_1 = 10
 fi_1 = 10
 
-alfa_2 = 370
-fi_2 = 10
-
 point_A1 = Point(cos(math.radians(alfa_1)), sin(math.radians(alfa_1)))
 point_B1 = Point(cos(math.radians(alfa_1 + fi_1)), sin(math.radians(alfa_1 + fi_1)))
 
-point_A2 = Point(cos(math.radians(alfa_2)), sin(math.radians(alfa_2)))
-point_B2 = Point(cos(math.radians(alfa_2 + fi_2)), sin(math.radians(alfa_2 + fi_2)))
-
-print(point_A1)
-print(point_B1)
-print(point_A2)
-print(point_B2)
+#print(Triangle(Point(0,0), point_A1, point_A1))
 
 # Well, I get the points
 # Point itself lie on circle, but really, I do not need circle itself
@@ -376,7 +298,7 @@ assert intercept_checker(5, 7, 1, 3) == "no"
 # The angle show the point between [0, 360) on the circle
 # And after 360 value, it should start over, so 369 degree = 9 degree
 # Probably I need to use functions (like cosines or sinus), instead of raw angle value
-print(8*pi - 2*pi)
+#print(8*pi - 2*pi)
 
 arcs_rads = [0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6, 2.8, 3.0, 3.2, 3.4, 3.6, 3.8, 4,
         4.2, 4.4, 4.6, 4.8, 5, 5.2, 5.4, 5.6, 5.8, 6.0, 6.2, 6.4, 6.6, 6.8, 7]

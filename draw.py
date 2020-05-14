@@ -1,6 +1,6 @@
 # Let's try it another way again and again and again
 # Imports
-import tools
+import Collections.tools as tools
 import globals
 import random
 import string
